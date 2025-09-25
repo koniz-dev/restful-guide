@@ -54,7 +54,7 @@ src/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/koniz-dev/restful-guide.git
    cd restful-guide
    ```
 
@@ -65,7 +65,7 @@ src/
 
 3. **Environment Setup**
    ```bash
-   cp env.example .env
+   cp .env.example .env
    ```
    
    Edit `.env` file with your configuration:
@@ -185,7 +185,7 @@ curl -X GET http://localhost:8080/users \
 
 ## 🤝 Contributing
 
-1. Fork the repository
+1. Fork the repository: [https://github.com/koniz-dev/restful-guide](https://github.com/koniz-dev/restful-guide)
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)

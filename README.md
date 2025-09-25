@@ -183,6 +183,16 @@ curl -X GET http://localhost:8080/users \
 | `AUTH_TOKEN_NAME` | Cookie name for session token | `AUTH_TOKEN` | ❌ |
 | `PORT` | Server port | `8080` | ❌ |
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs/) directory:
+
+- **[Architecture Guide](./docs/ARCHITECTURE.md)** - System design and architectural patterns
+- **[Best Practices](./docs/BEST_PRACTICES.md)** - Coding standards and best practices
+- **[API Fundamentals](./docs/FUNDAMENTALS.md)** - RESTful API design principles
+- **[System Diagrams](./docs/DIAGRAMS.md)** - Visual system representations
+- **[Knowledge Base](./docs/KNOWLEDGE_BASE.md)** - Technical concepts and implementations
+
 ## 🤝 Contributing
 
 1. Fork the repository: [https://github.com/koniz-dev/restful-guide](https://github.com/koniz-dev/restful-guide)

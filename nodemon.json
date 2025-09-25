@@ -1,0 +1,8 @@
+{
+    "watch": ["src"],
+    "ext": "ts,json",
+    "exec": "ts-node --esm --files ./src/index.ts",
+    "ignore": ["dist"],
+    "delay": "2500"
+  }
+  

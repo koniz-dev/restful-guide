@@ -91,18 +91,18 @@ sequenceDiagram
 src/
 ├── controllers/          # Presentation Layer
 │   ├── authentication.ts # Auth business logic
-│   └── users.ts         # User business logic
-├── db/                  # Data Access Layer
-│   └── user.ts          # Database operations & models
-├── helpers/             # Business Logic Layer
-│   └── index.ts         # Utility functions
-├── middlewares/         # Cross-cutting Concerns
-│   └── index.ts         # Authentication & authorization
-├── router/              # Presentation Layer
-│   ├── index.ts         # Main router factory
+│   └── users.ts          # User business logic
+├── db/                   # Data Access Layer
+│   └── user.ts           # Database operations & models
+├── helpers/              # Business Logic Layer
+│   └── index.ts          # Utility functions
+├── middlewares/          # Cross-cutting Concerns
+│   └── index.ts          # Authentication & authorization
+├── router/               # Presentation Layer
+│   ├── index.ts          # Main router factory
 │   ├── authentication.ts # Auth routes
-│   └── users.ts         # User routes
-└── index.ts             # Application entry point
+│   └── users.ts          # User routes
+└── index.ts              # Application entry point
 ```
 
 ## 🔐 Security Architecture

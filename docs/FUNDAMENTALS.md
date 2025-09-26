@@ -78,11 +78,11 @@ POST   /updateUser      # Wrong method for update
 - **302 Found**: Resource temporarily moved
 
 ### 4xx Client Error
-- **400 Bad Request**: Invalid request syntax
-- **401 Unauthorized**: Authentication required
-- **403 Forbidden**: Access denied
+- **400 Bad Request**: Invalid request syntax or missing required fields
+- **401 Unauthorized**: Authentication required or failed
+- **403 Forbidden**: Access denied (authenticated but not authorized)
 - **404 Not Found**: Resource not found
-- **409 Conflict**: Resource conflict
+- **409 Conflict**: Resource conflict (e.g., duplicate user registration)
 
 ### 5xx Server Error
 - **500 Internal Server Error**: Server error
@@ -192,20 +192,26 @@ const hash = hashFunction(password + salt + pepper);
 
 #### Server-side Validation
 ```typescript
-// Required fields
+// Required fields validation
 if (!username || !email || !password) {
-    return res.sendStatus(400);
+    return res.sendStatus(400); // Bad Request - missing required fields
 }
 
-// Email format
+// Email format validation
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if (!emailRegex.test(email)) {
-    return res.sendStatus(400);
+    return res.sendStatus(400); // Bad Request - invalid email format
 }
 
-// Password strength
+// Password strength validation
 if (password.length < 8) {
-    return res.sendStatus(400);
+    return res.sendStatus(400); // Bad Request - password too weak
+}
+
+// Check for duplicate user
+const existingUser = await getUserByEmail(email);
+if (existingUser) {
+    return res.sendStatus(409); // Conflict - user already exists
 }
 ```
 

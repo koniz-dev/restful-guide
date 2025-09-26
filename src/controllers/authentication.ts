@@ -11,7 +11,7 @@ export const register = async (req: express.Request, res: express.Response) => {
         }
         const existingUser = await getUserByEmail(email);
         if (existingUser) {
-            return res.sendStatus(400);
+            return res.sendStatus(409);
         }
         const salt = random();
         const user = await createUser({
@@ -19,10 +19,10 @@ export const register = async (req: express.Request, res: express.Response) => {
             email,
             authentication: { salt, password: authentication(salt, password) },
         });
-        return res.status(200).json(user).end();
+        return res.status(201).json(user).end();
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500);
     }
 };
 
@@ -34,12 +34,12 @@ export const login = async (req: express.Request, res: express.Response) => {
         }
         const user = await getUserByEmail(email).select("+authentication.salt +authentication.password");
         if (!user || !user.authentication) {
-            return res.sendStatus(400);
+            return res.sendStatus(401);
         }
         const auth = user.authentication!;
         const expectedHash = authentication(auth.salt as string, password);
         if (auth.password !== expectedHash) {
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
         const salt = random();
         auth.sessionToken = authentication(salt, user._id.toString());
@@ -48,6 +48,6 @@ export const login = async (req: express.Request, res: express.Response) => {
         return res.status(200).json(user).end();
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500);
     }
 };

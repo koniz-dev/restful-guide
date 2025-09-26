@@ -73,7 +73,7 @@ req.user      // Custom user data (from middleware)
 
 // Response methods
 res.json(data)           // Send JSON response
-res.status(200).json()   // Set status and send JSON
+res.status(201).json()   // Set status and send JSON (201 for created resources)
 res.sendStatus(404)      // Send status only
 res.cookie(name, value)  // Set cookie
 res.redirect(url)        // Redirect to URL
@@ -465,11 +465,67 @@ app.use((error, req, res, next) => {
     });
   }
   
+  // Default to 500 for unexpected server errors
   res.status(500).json({
     success: false,
     error: 'Internal Server Error'
   });
 });
+```
+
+## 📊 HTTP Status Codes Best Practices
+
+### Proper Status Code Usage
+
+```typescript
+// ✅ Correct status codes for different scenarios
+
+// 2xx Success
+res.status(200).json(data);        // GET requests - data retrieved
+res.status(201).json(newResource); // POST requests - resource created
+res.status(204).send();            // DELETE requests - resource deleted
+
+// 4xx Client Errors
+res.sendStatus(400); // Bad Request - invalid input or missing fields
+res.sendStatus(401); // Unauthorized - authentication failed
+res.sendStatus(403); // Forbidden - authenticated but not authorized
+res.sendStatus(404); // Not Found - resource doesn't exist
+res.sendStatus(409); // Conflict - resource already exists
+
+// 5xx Server Errors
+res.sendStatus(500); // Internal Server Error - unexpected server error
+```
+
+### Common Mistakes to Avoid
+
+```typescript
+// ❌ Wrong: Using 400 for authentication errors
+if (!user || !user.authentication) {
+    return res.sendStatus(400); // Should be 401
+}
+
+// ❌ Wrong: Using 400 for duplicate resources
+if (existingUser) {
+    return res.sendStatus(400); // Should be 409
+}
+
+// ❌ Wrong: Using 400 for server errors
+catch (error) {
+    return res.sendStatus(400); // Should be 500
+}
+
+// ✅ Correct usage
+if (!user || !user.authentication) {
+    return res.sendStatus(401); // Unauthorized
+}
+
+if (existingUser) {
+    return res.sendStatus(409); // Conflict
+}
+
+catch (error) {
+    return res.sendStatus(500); // Internal Server Error
+}
 ```
 
 ## 🔧 Development Tools

@@ -19,7 +19,7 @@ const expectedHash = authentication(salt, password);
 ```typescript
 // ✅ Good: Proper null checks
 if (!user || !user.authentication) {
-    return res.sendStatus(400);
+    return res.sendStatus(401); // Unauthorized - user not found or no auth data
 }
 const auth = user.authentication!; // Non-null assertion after check
 
@@ -32,7 +32,7 @@ const auth = user.authentication; // Could be undefined
 // ✅ Good: Safe type assertion with checks
 const currentUserId = get(req, "identity._id") as string | undefined;
 if (!currentUserId || currentUserId.toString() !== id) {
-    return res.sendStatus(403);
+    return res.sendStatus(403); // Forbidden - user can't access this resource
 }
 
 // ❌ Bad: Unsafe type assertion
@@ -47,10 +47,10 @@ const currentUserId = get(req, "identity._id") as string;
 export const register = async (req: express.Request, res: express.Response) => {
     try {
         // Business logic
-        return res.status(200).json(user).end();
+        return res.status(201).json(user).end(); // 201 Created for new resource
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500); // 500 Internal Server Error for server issues
     }
 };
 ```
@@ -59,13 +59,13 @@ export const register = async (req: express.Request, res: express.Response) => {
 ```typescript
 // ✅ Good: Specific HTTP status codes
 if (!user) {
-    return res.sendStatus(404); // Not Found
+    return res.sendStatus(404); // Not Found - resource doesn't exist
 }
 if (!sessionToken) {
-    return res.sendStatus(403); // Forbidden
+    return res.sendStatus(401); // Unauthorized - no authentication token
 }
 if (!username) {
-    return res.sendStatus(400); // Bad Request
+    return res.sendStatus(400); // Bad Request - missing required field
 }
 ```
 
@@ -74,7 +74,7 @@ if (!username) {
 // ✅ Good: Detailed error logging
 catch (error) {
     console.log('Authentication error:', error);
-    return res.sendStatus(400);
+    return res.sendStatus(500); // 500 Internal Server Error for unexpected errors
 }
 ```
 
@@ -123,13 +123,13 @@ const sessionToken = req.cookies["AUTH_TOKEN"];
 // ✅ Good: Input validation
 const { username, email, password } = req.body;
 if (!username || !email || !password) {
-    return res.sendStatus(400);
+    return res.sendStatus(400); // Bad Request - missing required fields
 }
 
 // ✅ Good: Database validation
 const existingUser = await getUserByEmail(email);
 if (existingUser) {
-    return res.sendStatus(400);
+    return res.sendStatus(409); // Conflict - user already exists
 }
 ```
 
@@ -228,7 +228,7 @@ export const getUserBySessionToken = (sessionToken: string) =>
 app.use(compression());
 
 // ✅ Good: Efficient response format
-return res.status(200).json(user).end();
+return res.status(201).json(user).end(); // 201 Created for new resources
 ```
 
 ### 3. **Connection Management**

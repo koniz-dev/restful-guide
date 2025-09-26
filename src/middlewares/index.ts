@@ -13,7 +13,7 @@ export const isOwner = async (req: express.Request, res: express.Response, next:
         next();
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500);
     }
 };
 
@@ -21,16 +21,16 @@ export const isAuthenticated = async (req: express.Request, res: express.Respons
     try {
         const sessionToken = req.cookies[process.env.AUTH_TOKEN_NAME!];
         if (!sessionToken) {
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
         const existingUser = await getUserBySessionToken(sessionToken);
         if (!existingUser) {
-            return res.sendStatus(403);
+            return res.sendStatus(401);
         }
         merge(req, { identity: existingUser });
         next();
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.sendStatus(500);
     }
 };
